@@ -1,10 +1,8 @@
 import cv2
-from tensorflow.keras.preprocessing.image import img_to_array
-import numpy as np
 from ultralytics import YOLO
 
 ESC_KEY = 27
-VIDEO = 2
+VIDEO = 3
 
 # Load YOLOv8 model
 model = YOLO("best.pt")
