@@ -35,3 +35,5 @@ while True:
 
     if cv2.waitKey(1) == ESC_KEY:
         break
+
+# TODO: salvar a area fora do loop pra fazer a diferença
