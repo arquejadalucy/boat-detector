@@ -1,3 +1,5 @@
+import logging
+
 import cv2
 from ultralytics import YOLO
 
@@ -20,14 +22,18 @@ video = cv2.VideoCapture(
     f"{videos[VIDEO].get('path')}/{videos[VIDEO].get('perspective')}_camera_VID.mp4")
 
 while True:
+    logging.info("Reading video")
     success, frame = video.read()
     if not success:
+        logging.error("Failed while reading video")
         break
 
     # Perform object detection
+    logging.info("Performing object detection")
     results = model(frame)
 
     # plot results
+    logging.info("Plotting results")
     frame_ = results[0].plot()
 
     # visualize
