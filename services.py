@@ -9,3 +9,9 @@ def object_detection(image):
 
 def check_detected(model_results):
     return bool(model_results[0].boxes)
+
+
+def calculate_bbox_area(model_results):
+    boxes = model_results[0].boxes
+    area = boxes.xywh.tolist()[0][2] * boxes.xywh.tolist()[0][3]
+    return area

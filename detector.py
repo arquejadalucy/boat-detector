@@ -2,7 +2,7 @@ import logging
 
 import cv2
 
-from services import object_detection, check_detected
+from services import object_detection, check_detected, calculate_bbox_area
 
 ESC_KEY = 27
 VIDEO = 3
@@ -20,8 +20,9 @@ video = cv2.VideoCapture(
     f"{videos[VIDEO].get('path')}/{videos[VIDEO].get('perspective')}_camera_VID.mp4")
 
 detection_flags = []
+areas = []
 
-while True:
+while len(areas) < 5:
     logging.info("Reading video")
     success, frame = video.read()
     if not success:
@@ -32,10 +33,12 @@ while True:
     logging.info("Performing object detection")
     results = object_detection(frame)
 
-    # Update detection flag
+    # Update detection flag and areas
     if flag := check_detected(results):
         logging.info("BOAT DETECTED")
         detection_flags.append(flag)
+        bbox_area = calculate_bbox_area(results)
+        areas.append(calculate_bbox_area(results))
 
     # plot results
     logging.info("Plotting results")
