@@ -1,13 +1,11 @@
 import logging
 
 import cv2
-from ultralytics import YOLO
+
+from services import object_detection, check_detected
 
 ESC_KEY = 27
 VIDEO = 3
-
-# Load YOLOv8 model
-model = YOLO("best.pt")
 
 videos = {1: {"path": "prodromos_2021_10_29_sailboats_busy/videos/2",
               "perspective": "right"},
@@ -21,6 +19,8 @@ video = cv2.VideoCapture(
     f"mit-marine-perception-dataset/"
     f"{videos[VIDEO].get('path')}/{videos[VIDEO].get('perspective')}_camera_VID.mp4")
 
+detection_flags = []
+
 while True:
     logging.info("Reading video")
     success, frame = video.read()
@@ -30,7 +30,12 @@ while True:
 
     # Perform object detection
     logging.info("Performing object detection")
-    results = model(frame)
+    results = object_detection(frame)
+
+    # Update detection flag
+    if flag := check_detected(results):
+        logging.info("BOAT DETECTED")
+        detection_flags.append(flag)
 
     # plot results
     logging.info("Plotting results")
@@ -41,5 +46,7 @@ while True:
 
     if cv2.waitKey(1) == ESC_KEY:
         break
+
+logging.info(f"Detection completed. Found {len(detection_flags)} boats.")
 
 # TODO: salvar a area fora do loop pra fazer a diferença
