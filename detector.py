@@ -22,7 +22,7 @@ video = cv2.VideoCapture(
 detection_flags = []
 areas = []
 
-while len(areas) < 5:
+while True:
     logging.info("Reading video")
     success, frame = video.read()
     if not success:
