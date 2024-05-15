@@ -4,7 +4,7 @@ from ultralytics import YOLO
 def object_detection(image):
     # Load YOLOv8 model
     model = YOLO("best.pt")
-    return model(image, conf=0.5, save_txt=True)
+    return model(image, conf=0.7, save_txt=True)
 
 
 def check_detected(model_results):
