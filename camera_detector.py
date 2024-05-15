@@ -11,30 +11,36 @@ cap.set(4, 480)
 detection_flags = []
 areas = []
 
-while True:
-    ret, frame = cap.read()
 
-    # Perform object detection
-    logging.info("Performing object detection")
-    results = object_detection(frame)
+def perform_detections():
+    while True:
+        ret, frame = cap.read()
 
-    # Update detection flag
-    if flag := check_detected(results):
-        logging.info("BOAT DETECTED")
-        detection_flags.append(flag)
-        areas.append(calculate_bbox_area(results))
+        # Perform object detection
+        logging.info("Performing object detection")
+        results = object_detection(frame)
 
-    # plot results
-    logging.info("Plotting results")
-    frame_ = results[0].plot()
+        # Update detection flag
+        if flag := check_detected(results):
+            logging.info("BOAT DETECTED")
+            detection_flags.append(flag)
+            areas.append(calculate_bbox_area(results))
 
-    # visualize
-    cv2.imshow("Detecting", frame_)
+        # plot results
+        logging.info("Plotting results")
+        frame_ = results[0].plot()
 
-    if cv2.waitKey(1) == ord('q'):
-        break
+        # visualize
+        cv2.imshow("Detecting", frame_)
 
-cap.release()
-cv2.destroyAllWindows()
+        if cv2.waitKey(1) == ord('q'):
+            break
 
+        print(areas)
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+perform_detections()
 logging.info(f"Detection completed. Found {len(detection_flags)} boats.")

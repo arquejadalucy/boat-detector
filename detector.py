@@ -22,34 +22,39 @@ video = cv2.VideoCapture(
 detection_flags = []
 areas = []
 
-while True:
-    logging.info("Reading video")
-    success, frame = video.read()
-    if not success:
-        logging.error("Failed while reading video")
-        break
 
-    # Perform object detection
-    logging.info("Performing object detection")
-    results = object_detection(frame)
+def perform_detections():
+    while True:
+        logging.info("Reading video")
+        success, frame = video.read()
+        if not success:
+            logging.error("Failed while reading video")
+            break
 
-    # Update detection flag and areas
-    if flag := check_detected(results):
-        logging.info("BOAT DETECTED")
-        detection_flags.append(flag)
-        bbox_area = calculate_bbox_area(results)
-        areas.append(calculate_bbox_area(results))
+        # Perform object detection
+        logging.info("Performing object detection")
+        results = object_detection(frame)
 
-    # plot results
-    logging.info("Plotting results")
-    frame_ = results[0].plot()
+        # Update detection flag and areas
+        if flag := check_detected(results):
+            logging.info("BOAT DETECTED")
+            detection_flags.append(flag)
+            areas.append(calculate_bbox_area(results))
 
-    # visualize
-    cv2.imshow("Detecting", frame_)
+        # plot results
+        logging.info("Plotting results")
+        frame_ = results[0].plot()
 
-    if cv2.waitKey(1) == ESC_KEY:
-        break
+        # visualize
+        cv2.imshow("Detecting", frame_)
 
+        if cv2.waitKey(1) == ESC_KEY:
+            break
+
+        print(areas)
+
+
+perform_detections()
 logging.info(f"Detection completed. Found {len(detection_flags)} boats.")
 
 # TODO: salvar a area fora do loop pra fazer a diferença
